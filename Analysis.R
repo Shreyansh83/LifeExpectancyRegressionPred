@@ -15,7 +15,7 @@ setwd("<Your current working folder here>")
 
 #Load data from current working directory and give them the custom column names
 #data <- read.csv("Conbined GDP per capita and life expectency by birth.csv")
-data <- read.csv("Econmical_Factors.csv")
+data <- read.csv("Data/Econmical_Factors.csv")
 
 colnames(data) <- c("Country","Code","Region","Year","GDP_Per_Capita","Life_Expectency_by_birth","Inflation_percent","GNI")
 
@@ -585,8 +585,7 @@ c2 <- data %>% filter(Country == "Syrian Arab Republic" | Country == "Venezuela,
         plot.title = element_text(hjust = 0.5))
 
 grid.arrange(c1, c2, nrow = 2)
-?geom_rect
-ggsave("q3_plot",last_plot(),device = "png")
+#ggsave("q3_plot",last_plot(),device = "png")
 
 data %>% filter(Year %in% 2000:2020 & Country=="Liberia" | Country=="Sierra Leone"|Country=="Guinea")
 max(data['Year'])
@@ -607,7 +606,7 @@ max(data['Year'])
 # The Laspeyres formula is generally used.
 
 #Read new file
-new_data <- read.csv("Econmical_Factors_V1.csv")
+new_data <- read.csv("Data/Econmical_Factors_V1.csv")
 
 #V1_FILE
 colnames(new_data) <- c("Country","Code","Region","Year","GDP_Per_Capita","Life_Expectency_by_birth","Inflation_percent","GNI","HDI")
@@ -645,7 +644,7 @@ data$inflation_percent_norm <- (data$Inflation_percent - min(data$Inflation_perc
 # })
 
 #V1 DATA FILE
-boxplot(data[9:12])
+boxplot(data[9:11])
 #Function to calculate count of outliers
 outliers <- lapply(data[9:11], function(x) {
   bp <- boxplot.stats(x)
@@ -666,17 +665,17 @@ sapply(outliers, length)
 #     new_data[, i] <- col
 #   }
 # }
-boxplot(new_data)
+#boxplot(new_data)
 #Function to calculate count of outliers
-outliers <- lapply(new_data, function(x) {
-  bp <- boxplot.stats(x)
-  bp$out
-})
+# outliers <- lapply(new_data, function(x) {
+#   bp <- boxplot.stats(x)
+#   bp$out
+# })
 # Count number of outliers for each column
-sapply(outliers, length)
+# sapply(outliers, length)
 
-new_data <- data[9:12]
-new_data <- cbind.data.frame(new_data,Life_Expectency_by_birth = data$Life_Expectency_by_birth)
+# new_data <- data[9:11]
+# new_data <- cbind.data.frame(new_data,Life_Expectency_by_birth = data$Life_Expectency_by_birth)
 
 
 #check correlation between data
@@ -684,7 +683,7 @@ corrgram(new_data,upper.panel=panel.cor, main="Econmical Factors")
 #install.packages("psych")
 library(psych)
 
-data <- data[,c(1,2,3,4,5,7,8,6,9,10,11,12)]
+data <- data[,c(1,2,3,4,5,7,8,6,9,10,11)]
 
 pairs.panels(new_data,
              smooth = TRUE,      # If TRUE, draws loess smooths
@@ -714,11 +713,10 @@ linear_model <- lm(Life_Expectency_by_birth ~ GDP_per_capita_norm + GNI_norm + i
 summary(linear_model)
 summary(linear_model_HDI)
 
-cor(data$HDI,data$Life_Expectency_by_birth)
+cor(new_data$HDI,new_data$Life_Expectency_by_birth)
 
-vif(linear_model)
-
-?vif
+library('regclass')
+VIF(linear_model)
 
 library(lmtest)
 grangertest(Life_Expectency_by_birth ~ GDP_per_capita_norm, order = 3, data = data)
