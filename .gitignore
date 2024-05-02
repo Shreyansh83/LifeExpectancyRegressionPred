@@ -49,7 +49,7 @@ po/*~
 rsconnect/
 
 #Unncessary folder
-Other/
+Others/
 
 #Editor cache
 .idea
